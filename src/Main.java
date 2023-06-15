@@ -3,53 +3,55 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws Exception {
         Scanner input = new Scanner(System.in); // сканер ввода
-        String[] phrase;                        // введенная фраза
-        int firstOperand;                       // первый операнд
-        int secondOperand;                      // второй операнд
-        boolean isRoman;                        // если римское число
-        int result;                             // результат
-        String output;                          // вывод
 
-        while (true) {
-            phrase = input.nextLine().split(" "); // ввод фразы и разделение на составляющие
+        while (true)
+            System.out.println(calc(input.nextLine()));
+    }
 
-            if (phrase.length != 3) // если составляющих не 3
-                throw new Exception("Формат математической операции не удовлетворяет заданию - " +
-                                    "два операнда и один оператор (+, -, /, *)");
+    public static String calc(String phrases) throws Exception {
+        int firstOperand;                           // первый операнд
+        int secondOperand;                          // второй операнд
+        boolean isRoman;                            // если римское число
+        String[] phrase = phrases.split(" "); // части фразы
+        int result;                                 // результат
+        String output;                              // вывод
 
-            try { // преобразование строки в арабские числа
-                firstOperand = Integer.parseInt(phrase[0]);
-                secondOperand = Integer.parseInt(phrase[2]);
-                isRoman = false;
-            }
-            catch (Exception e) { // при исключении преобразование строки в римские числа
-                firstOperand = romanToArabic(phrase[0]);
-                secondOperand = romanToArabic(phrase[2]);
-                isRoman = true;
-            }
+        if (phrase.length != 3) // если составляющих не 3
+            throw new Exception("Формат математической операции не удовлетворяет заданию - " +
+                    "два операнда и один оператор (+, -, /, *)");
 
-            if (firstOperand > 10 || secondOperand > 10 || firstOperand < 1 || secondOperand < 1)
-                throw new Exception("Калькулятор должен принимать на вход числа от 1 до 10 включительно, не более");
-
-            switch (phrase[1]) { // проведение математической операции в зависимости от указанного операнда
-                case "+" -> result = firstOperand + secondOperand;
-                case "-" -> result = firstOperand - secondOperand;
-                case "*" -> result = firstOperand * secondOperand;
-                case "/" -> result = firstOperand / secondOperand;
-                default -> throw new Exception("Неверный оператор математической операции");
-            }
-
-            if (isRoman) {
-                if (result < 1)
-                    throw new Exception("В римской системе нет нуля и отрицательных чисел");
-                else
-                    output = arabicToRoman(result);
-            }
-            else
-                output = String.valueOf(result);
-
-            System.out.println(output);
+        try { // преобразование строки в арабские числа
+            firstOperand = Integer.parseInt(phrase[0]);
+            secondOperand = Integer.parseInt(phrase[2]);
+            isRoman = false;
         }
+        catch (Exception e) { // при исключении преобразование строки в римские числа
+            firstOperand = romanToArabic(phrase[0]);
+            secondOperand = romanToArabic(phrase[2]);
+            isRoman = true;
+        }
+
+        if (firstOperand > 10 || secondOperand > 10 || firstOperand < 1 || secondOperand < 1)
+            throw new Exception("Калькулятор должен принимать на вход числа от 1 до 10 включительно, не более");
+
+        switch (phrase[1]) { // проведение математической операции в зависимости от указанного операнда
+            case "+" -> result = firstOperand + secondOperand;
+            case "-" -> result = firstOperand - secondOperand;
+            case "*" -> result = firstOperand * secondOperand;
+            case "/" -> result = firstOperand / secondOperand;
+            default -> throw new Exception("Неверный оператор математической операции");
+        }
+
+        if (isRoman) {
+            if (result < 1)
+                throw new Exception("В римской системе нет нуля и отрицательных чисел");
+            else
+                output = arabicToRoman(result);
+        }
+        else
+            output = String.valueOf(result);
+
+        return output;
     }
 
     public static int romanToArabic(String number) throws Exception { // преобразование римского числа в арабское
